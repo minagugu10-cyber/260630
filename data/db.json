@@ -1,6 +1,20 @@
 {
   "requests": [
     {
+      "id": "req_lvfgj983r",
+      "name": "고세종",
+      "employeeId": "123456",
+      "department": "기획예산성과관리팀",
+      "reason": "dd",
+      "pdfFileName": "EPKI_ì ì²­ì_ë¹ìì.pdf",
+      "pdfFilePath": "temp_uploads\\1782804583058-594076039-EPKI_ì ì²­ì_ë¹ìì.pdf",
+      "email": "sejong123@korea.ac.kr",
+      "status": "pending",
+      "processStatus": "waiting",
+      "createdAt": "2026-06-30T07:29:43.061Z",
+      "logs": []
+    },
+    {
       "id": "req_fp020g18p",
       "name": "이정민",
       "employeeId": "210844",

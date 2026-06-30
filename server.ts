@@ -10,6 +10,11 @@ const app = express();
 const PORT = 3000;
 
 // 필요한 디렉토리 생성 (Vercel read-only FS 대응 try-catch)
+const DATA_DIR = path.join(process.cwd(), 'data');
+const UPLOADS_DIR = path.join(process.cwd(), 'temp_uploads');
+const PUBLIC_DIR = path.join(process.cwd(), 'public');
+const TEMPLATES_DIR = path.join(PUBLIC_DIR, 'templates');
+
 try {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
