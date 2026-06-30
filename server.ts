@@ -3,7 +3,6 @@ import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
 import nodemailer from 'nodemailer';
-import { createServer as createViteServer } from 'vite';
 import { runDraftAutomation } from './server/automation';
 import { EPKIRequest } from './src/types';
 
@@ -678,6 +677,7 @@ app.get('/api/requests/:id/download-draft', (req, res) => {
 // ==========================================
 async function startServer() {
   if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',

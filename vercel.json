@@ -1,15 +1,15 @@
 {
   "version": 2,
+  "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": "dist/client",
   "functions": {
-    "api/index.ts": {
+    "api/index.js": {
       "includeFiles": "data/**"
     }
   },
   "routes": [
-    { "src": "/api/(.*)", "dest": "api/index.ts" },
-    { "handle": "filesystem" },
+    { "src": "/api/(.*)", "dest": "api/index.js" },
     { "src": "/(.*)", "dest": "/dist/client/$1" }
   ]
 }
