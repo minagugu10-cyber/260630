@@ -9,47 +9,59 @@ import { EPKIRequest } from './src/types';
 const app = express();
 const PORT = 3000;
 
-// 필요한 디렉토리 생성
-const DATA_DIR = path.join(process.cwd(), 'data');
-const UPLOADS_DIR = path.join(process.cwd(), 'temp_uploads');
-const PUBLIC_DIR = path.join(process.cwd(), 'public');
-const TEMPLATES_DIR = path.join(PUBLIC_DIR, 'templates');
-
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+// 필요한 디렉토리 생성 (Vercel read-only FS 대응 try-catch)
+try {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+} catch (e) {
+  console.log('[Vercel] data 디렉토리 생성 생략 (읽기 전용 FS)');
 }
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  }
+} catch (e) {
+  console.log('[Vercel] temp_uploads 디렉토리 생성 생략');
 }
-if (!fs.existsSync(PUBLIC_DIR)) {
-  fs.mkdirSync(PUBLIC_DIR, { recursive: true });
-}
-if (!fs.existsSync(TEMPLATES_DIR)) {
-  fs.mkdirSync(TEMPLATES_DIR, { recursive: true });
-}
+try {
+  if (!fs.existsSync(PUBLIC_DIR)) {
+    fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+  }
+} catch (e) {}
+try {
+  if (!fs.existsSync(TEMPLATES_DIR)) {
+    fs.mkdirSync(TEMPLATES_DIR, { recursive: true });
+  }
+} catch (e) {}
 
 // 빈 양식 예시 파일 생성 (사용자 다운로드용)
-const templateFilePath = path.join(TEMPLATES_DIR, 'EPKI_Application_Form.pdf');
-if (!fs.existsSync(templateFilePath)) {
-  fs.writeFileSync(
-    templateFilePath,
-    '%PDF-1.4\n% EPKI Application Form Blank Template\n4 0 obj\n<< /Type /Page >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF',
-    'utf-8'
-  );
-}
+try {
+  const templateFilePath = path.join(TEMPLATES_DIR, 'EPKI_Application_Form.pdf');
+  if (!fs.existsSync(templateFilePath)) {
+    fs.writeFileSync(
+      templateFilePath,
+      '%PDF-1.4\n% EPKI Application Form Blank Template\n4 0 obj\n<< /Type /Page >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF',
+      'utf-8'
+    );
+  }
+} catch (e) {}
 
-const hwpTemplateFilePath = path.join(TEMPLATES_DIR, 'EPKI_Application_Form.hwp');
-if (!fs.existsSync(hwpTemplateFilePath)) {
-  fs.writeFileSync(
-    hwpTemplateFilePath,
-    'EPKI Application Form HWP Blank Template Dummy Content',
-    'utf-8'
-  );
-}
+try {
+  const hwpTemplateFilePath = path.join(TEMPLATES_DIR, 'EPKI_Application_Form.hwp');
+  if (!fs.existsSync(hwpTemplateFilePath)) {
+    fs.writeFileSync(
+      hwpTemplateFilePath,
+      'EPKI Application Form HWP Blank Template Dummy Content',
+      'utf-8'
+    );
+  }
+} catch (e) {}
 
-const draftTemplateFilePath = path.join(TEMPLATES_DIR, 'EPKI_Draft_Template.hwp');
-if (!fs.existsSync(draftTemplateFilePath)) {
-  const defaultDraftHtml = `<!DOCTYPE html>
+try {
+  const draftTemplateFilePath = path.join(TEMPLATES_DIR, 'EPKI_Draft_Template.hwp');
+  if (!fs.existsSync(draftTemplateFilePath)) {
+    const defaultDraftHtml = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -123,49 +135,53 @@ if (!fs.existsSync(draftTemplateFilePath)) {
   </div>
 </body>
 </html>`;
-  fs.writeFileSync(draftTemplateFilePath, defaultDraftHtml, 'utf-8');
-}
+    fs.writeFileSync(draftTemplateFilePath, defaultDraftHtml, 'utf-8');
+  }
+} catch (e) {}
 
 // 로컬 JSON 데이터베이스 초기화 및 시드 데이터 적재
 const DB_PATH = path.join(DATA_DIR, 'db.json');
-if (!fs.existsSync(DB_PATH)) {
-  const seedData = {
-    requests: [
-      {
-        id: 'req_seed_1',
-        name: '홍길동',
-        employeeId: '2024-08012',
-        department: '정보화운영과',
-        reason: '행정업무 처리용 EPKI 개인용 전자서명인증서 갱신 신청',
-        pdfFileName: '홍길동_EPKI_신청서_서명완료.pdf',
-        pdfFilePath: 'temp_uploads/seed_hong_gildong.pdf',
-        email: 'gildong@moe.go.kr',
-        status: 'pending',
-        processStatus: 'waiting',
-        createdAt: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
-        logs: []
-      },
-      {
-        id: 'req_seed_2',
-        name: '김서경',
-        employeeId: '2025-01044',
-        department: '교육행정정보과',
-        reason: '신규 임용에 따른 업무포털 및 NEIS 접속용 인증서 발급',
-        pdfFileName: '김서경_EPKI_신청서_스캔본.pdf',
-        pdfFilePath: 'temp_uploads/seed_kim_seokyung.pdf',
-        email: 'seokyung.kim@moe.go.kr',
-        status: 'pending',
-        processStatus: 'waiting',
-        createdAt: new Date(Date.now() - 3600000 * 5).toISOString(), // 5 hours ago
-        logs: []
-      }
-    ]
-  };
-  fs.writeFileSync(DB_PATH, JSON.stringify(seedData, null, 2), 'utf-8');
+try {
+  if (!fs.existsSync(DB_PATH)) {
+    const seedData = {
+      requests: [
+        {
+          id: 'req_seed_1',
+          name: '홍길동',
+          employeeId: '2024-08012',
+          department: '정보화운영과',
+          reason: '행정업무 처리용 EPKI 개인용 전자서명인증서 갱신 신청',
+          pdfFileName: '홍길동_EPKI_신청서_서명완료.pdf',
+          pdfFilePath: 'temp_uploads/seed_hong_gildong.pdf',
+          email: 'gildong@moe.go.kr',
+          status: 'pending',
+          processStatus: 'waiting',
+          createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+          logs: []
+        },
+        {
+          id: 'req_seed_2',
+          name: '김서경',
+          employeeId: '2025-01044',
+          department: '교육행정정보과',
+          reason: '신규 임용에 따른 업무포털 및 NEIS 접속용 인증서 발급',
+          pdfFileName: '김서경_EPKI_신청서_스캔본.pdf',
+          pdfFilePath: 'temp_uploads/seed_kim_seokyung.pdf',
+          email: 'seokyung.kim@moe.go.kr',
+          status: 'pending',
+          processStatus: 'waiting',
+          createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+          logs: []
+        }
+      ]
+    };
+    fs.writeFileSync(DB_PATH, JSON.stringify(seedData, null, 2), 'utf-8');
 
-  // 시드용 PDF 가짜 파일 생성
-  fs.writeFileSync(path.join(UPLOADS_DIR, 'seed_hong_gildong.pdf'), '%PDF-1.4 - Hong Gildong EPKI App', 'utf-8');
-  fs.writeFileSync(path.join(UPLOADS_DIR, 'seed_kim_seokyung.pdf'), '%PDF-1.4 - Kim Seokyung EPKI App', 'utf-8');
+    fs.writeFileSync(path.join(UPLOADS_DIR, 'seed_hong_gildong.pdf'), '%PDF-1.4 - Hong Gildong EPKI App', 'utf-8');
+    fs.writeFileSync(path.join(UPLOADS_DIR, 'seed_kim_seokyung.pdf'), '%PDF-1.4 - Kim Seokyung EPKI App', 'utf-8');
+  }
+} catch (e) {
+  console.log('[Vercel] 시드 데이터 생성 생략 (읽기 전용 FS)');
 }
 
 // 헬퍼: DB 읽기 / 쓰기
@@ -186,6 +202,7 @@ function saveRequests(requests: EPKIRequest[]) {
     fs.writeFileSync(DB_PATH, JSON.stringify({ requests }, null, 2), 'utf-8');
   } catch (err) {
     console.error('DB 저장 에러:', err);
+    // Vercel 읽기 전용 FS에서는 저장 실패를 무시
   }
 }
 
