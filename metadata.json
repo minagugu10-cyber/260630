@@ -1,0 +1,6 @@
+{
+  "name": "EPKI 신청 및 기안 자동화 시스템",
+  "description": "교육부 전자서명인증서(EPKI) 신청 접수, 안내 메일 발송, 결재 기안 작업을 자동화하는 시스템",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

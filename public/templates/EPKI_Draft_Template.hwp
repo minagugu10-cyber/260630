@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: 'Malgun Gothic', 'Dotum', sans-serif; line-height: 1.6; margin: 40px; color: #000; }
+  .header { text-align: center; font-size: 26px; font-weight: bold; border-bottom: 2px double #000; padding-bottom: 10px; margin-bottom: 20px; }
+  .doc-info { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+  .doc-info th, .doc-info td { border: 1px solid #000; padding: 8px; font-size: 13px; text-align: left; }
+  .doc-info th { background-color: #f2f2f2; font-weight: bold; text-align: center; width: 15%; }
+  .title-section { font-size: 18px; font-weight: bold; margin-top: 30px; margin-bottom: 15px; border-left: 4px solid #1e3a8a; padding-left: 10px; }
+  .content-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  .content-table th, .content-table td { border: 1px solid #000; padding: 12px 10px; font-size: 13px; }
+  .content-table th { background-color: #f2f2f2; font-weight: bold; text-align: center; width: 20%; }
+  .footer-org { text-align: center; font-size: 22px; font-weight: bold; margin-top: 50px; border-top: 1px solid #000; padding-top: 15px; }
+  .stamp { color: red; font-size: 14px; font-weight: bold; border: 2px red solid; padding: 5px; display: inline-block; margin-left: 10px; border-radius: 4px; }
+</style>
+</head>
+<body>
+  <div class="header">교 육 부 기 안 문</div>
+  <table class="doc-info">
+    <tr>
+      <th>기안부서</th>
+      <td>정보화운영과</td>
+      <th>기안자</th>
+      <td>시스템 관리자</td>
+    </tr>
+    <tr>
+      <th>기안일자</th>
+      <td>{{기안일자}}</td>
+      <th>결재상태</th>
+      <td>임시저장 (Playwright 자동 기안 완료)</td>
+    </tr>
+  </table>
+
+  <div class="title-section">제목: EPKI 전자서명인증서 발급 신청에 따른 승인 및 기안의 건</div>
+  
+  <p style="font-size: 14px;">1. 관련: 교육부 정보보안기본지침 및 행정전자서명(GPKI) 인증업무 지침</p>
+  <p style="font-size: 14px;">2. 위 관련 근거에 의거하여, 아래와 같이 교육부 전자서명인증서(EPKI) 발급 및 등록 승인을 기안하오니 재가하여 주시기 바랍니다.</p>
+
+  <table class="content-table">
+    <tr>
+      <th>신청자 성명</th>
+      <td>{{성명}}</td>
+    </tr>
+    <tr>
+      <th>사번 / 교직원번호</th>
+      <td>{{사번}}</td>
+    </tr>
+    <tr>
+      <th>소속 부서 / 직위</th>
+      <td>{{부서}}</td>
+    </tr>
+    <tr>
+      <th>공식 교직원 이메일</th>
+      <td>{{이메일}}</td>
+    </tr>
+    <tr>
+      <th>인증서 용도 및 사유</th>
+      <td>{{신청사유}}</td>
+    </tr>
+    <tr>
+      <th>스캔 신청서 첨부</th>
+      <td>{{첨부파일명}} (서명 완료본 자동 연동 완료)</td>
+    </tr>
+  </table>
+
+  <p style="margin-top: 30px; font-size: 13px;">붙임: 교육부 전자서명인증서 발급 신청서(자필서명 스캔본 PDF) 1부.  끝.</p>
+
+  <div class="footer-org">
+    교 육 부 장 관 <span class="stamp">직인생략</span>
+  </div>
+</body>
+</html>
