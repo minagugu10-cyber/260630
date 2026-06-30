@@ -3,11 +3,19 @@
   "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": "dist/client",
-  "functions": {
-    "api/index.js": {
-      "includeFiles": "data/**"
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "dist/server.cjs",
+          "dist/server.cjs.map",
+          "data/**"
+        ]
+      }
     }
-  },
+  ],
   "routes": [
     { "src": "/api/(.*)", "dest": "api/index.js" },
     { "src": "/(.*)", "dest": "/dist/client/$1" }
